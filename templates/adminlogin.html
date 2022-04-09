@@ -1,0 +1,65 @@
+{% extends 'baselogin.html' %}
+
+{% block title %} Admin Login {% endblock title %}
+
+{% block body %}
+
+
+<div class="container">
+    <div class="row mt-5">
+
+        <div class="col-md-12">
+
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="https://source.unsplash.com/600x900/?boss,company" class="img-fluid rounded-start"
+                            alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body text-center ">
+                            <i class="fa-solid fa-user-tie text-info fa-3x"></i>
+                            <h5 class="card-title text-center text-info text-bolder">-Admin Login-</h5>
+
+
+
+                        </div>
+
+                        <form class="m-2">
+                            <div class="mb-3">
+                                <label class="form-label">User Name</label>
+                                <input type="text" class="form-control" name="name" placeholder="Enter Your User Name" required>
+                                 
+                            </div>
+                            <div class="mb-3">
+                                <label  class="form-label">Password</label>
+                                <input type="password" class="form-control" name="password" placeholder="Enter Your Password" required >
+                                <div id="emailHelp" class="form-text">Don't Share Your Password With Anyone Else
+                                </div>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                            </div>
+                            <button type="submit" class="btn btn-info">Login</button>
+                        </form>
+
+                        <div class="text-center">
+                            <a href="/"> <i class="fa-solid fa-backward text-info fa-3x mt-5"></i>
+                         </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock body %}

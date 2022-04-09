@@ -1,0 +1,98 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sign-up</title>
+    <link href="..\static\css\signup.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+
+
+    <link rel="shortcut icon" href="../static/images/favicon (1).ico" type="image/x-icon">
+    
+</head>
+
+<body>
+    <!--container---------------------->
+    <div class="container">
+        <!--sign-up-box-container--->
+        <div class="sign-up">
+
+            <div id="png"><a href="/" title="HOME" class="mr-5"><img style="width:55px; height:55px ; "
+                        src="..\static\images\home-page.png"></a></div>
+            <!--heading-->
+            <form action="/register" method="post">
+                <div class="msg">{{ msg }}</div>
+                <h1 class="heading">Hello,Dear</h1>
+                <!--addmissionid-box-->
+                <div class="text">
+                    <i class="fa-brands fa-ideal"></i>
+                    <input placeholder="AddMISSION ID" type="text" name="addmissionid" required />
+                </div>
+                <!--name-box-->
+                <div class="text">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <input placeholder="Name" type="text" name="name" required />
+                </div>
+                <!--Email-box-->
+                <div class="text">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input placeholder="Email" type="email" name="email" required />
+                </div>
+                <!--address-box-->
+                <div class="text">
+                    <i class="fa-solid fa-map-location"></i>
+                    <input placeholder="Address" type="text" name="address" required />
+                </div>
+
+                <!--phone-box-->
+                <div class="text">
+                    <i class="fa-solid fa-phone"></i>    
+                    <input placeholder="Phone" type="number" name="phone" required />
+                </div>
+
+
+                <div class="trems">
+                    <input class="check" type="checkbox" required />
+                    <p class="conditions">I read and agree to <a href="#">Trems &amp; Conditions</a></p>
+                </div>
+                <!--button-->
+                <div class="toop">
+                    <button type="submit" class="btn btn-primary">CREATE ACCOUNT</button>
+                </div>
+
+            </form>
+            <!--sign-in-->
+            <div class="t py-3">
+                <p class="conditions" id="p3">Already have an account <a href="/userlogin">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+    <!--text-container-->
+    <div class="text-container">
+
+
+
+        <div class="diag"><img class="fig1" width="100%" height="105%" src="..\static\images\Inkeddia_LI.jpg" </div>
+
+
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

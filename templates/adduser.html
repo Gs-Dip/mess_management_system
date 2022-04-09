@@ -1,0 +1,38 @@
+{% extends 'baseadmindashboard.html' %}
+
+{% block title %}Add User{% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5">
+   <div class="text-center"> 
+       <i class="fas fa-user-plus fa-3x text-danger "></i>
+       <h2 class="text-white ">-AddUser-</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 col-sm-12 border-top border-danger">
+
+            <form class="m-2">
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label text-white">Name</label>
+                    <input type="text" class="form-control text-danger" name="name" placeholder="Enter Name" required>
+                   
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label text-white">Admission ID</label>
+                    <input type="text" class="form-control text-danger" name="admissionid" placeholder="Enter Addmission Id" required>
+                    
+                </div>
+               <div class="text-center">  
+                  <button type="submit" class="btn btn-danger ">Add</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-3"></div>
+    </div>
+</div>
+
+{% endblock body %}
