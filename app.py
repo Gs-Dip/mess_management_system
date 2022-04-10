@@ -83,6 +83,21 @@ def userdailybazarexpense():
     return render_template('userdailybazarexpense.html') 
 
 
+@app.route('/usermealrecord')
+def usermealrecord():
+    return render_template('usermealrecord.html')    
+
+
+@app.route('/usermessage')
+def usermessage():
+    return render_template('usermessage.html')   
+
+
+@app.route('/userendofmonth')
+def userendofmonth():
+    return render_template('userendofmonth.html')     
+
+
 
 
 

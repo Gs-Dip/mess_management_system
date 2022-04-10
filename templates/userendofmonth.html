@@ -1,0 +1,86 @@
+{% extends 'baseuserdashboard.html' %}
+
+{% block title %} EndOfMonth {% endblock title %}
+
+{% block body %}
+<div class="container">
+    <div class="row mt-3">
+
+        <div class="col-md-12">
+
+            <div class="card bg-dark">
+                <div class="row  ">
+                    <div class="col-md-4">
+                        <img src="https://source.unsplash.com/600x900/?calculator" class="img-fluid rounded-start"
+                            alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body text-center bg-dark">
+                            <div class="text-center">
+                                <i class="fas fa-chart-area text-danger fa-3x"></i>
+                                <h2 class="text-white">-EndOfMonth-</h2>
+                            </div>
+
+
+
+                        </div>
+
+                        <table class="table table-striped table-dark">
+                            <thead>
+                              <tr class="bg-danger">
+                                
+                                <th scope="col">AdmissionID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">MealRate</th>
+                                <th scope="col">TotalMeal</th>
+                                <th scope="col">TotalCost</th>
+                                <th scope="col">TotalPaid</th>
+                                <th scope="col">Remain</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                 
+                                <td>A125</td>
+                                <td>Dip</td>
+                                <td>75</td>
+                                <td>10</td>
+                                <td>750</td>
+                                <td>800</td>
+                                <td>50</td>
+                                 
+                                
+                              </tr>
+                              <tr>
+                                 
+                                <td>A130</td>
+                                <td>Tanmoy</td>
+                                <td>75</td>
+                                <td>20</td>
+                                <td>1500</td>
+                                <td>1000</td>
+                                <td>-500</td>
+                                 
+                                
+                              </tr>
+                              
+                            </tbody>
+                          </table>
+
+                         
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock body %}
