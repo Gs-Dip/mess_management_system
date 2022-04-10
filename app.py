@@ -67,6 +67,11 @@ def mealrecord():
     return render_template('meal-record.html')    
 
 
+@app.route('/bazarrecord')
+def bazarrecord():
+    return render_template('bazar-record.html')    
+
+
 @app.route('/endofmonth')
 def endofmonth():
     return render_template('end-of-month.html') 
