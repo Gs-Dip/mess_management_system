@@ -1,8 +1,16 @@
+ 
 import json
 from flask import Flask,redirect,render_template,request,flash,session  
 from flask_sqlalchemy import SQLAlchemy
 from importlib_metadata import re
 from werkzeug.security import generate_password_hash,check_password_hash
+
+
+#akhane json file ta open kora hoyeche....admin login ar jonno
+with open('config.json','r') as c:
+    jsondata=json.load(c)["jsonfile"]
+
+
 
 
 app=Flask(__name__)
@@ -17,6 +25,10 @@ class Test(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     name=db.Column(db.String(50))
 
+class User(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    admissionid=db.Column(db.String(50),unique=True)
+    name=db.Column(db.String(50))
 
 
 
@@ -36,10 +48,33 @@ def userlogin():
     return render_template('userlogin.html')   
 
 
-
-@app.route('/adminlogin')  
+#admin login------------------------------
+@app.route('/adminlogin',methods=['GET','POST'])  
 def adminlogin():
+    if request.method=="POST":
+        username=request.form.get('username')
+        password=request.form.get('password')
+
+        if(username==jsondata['user'] and password==jsondata['password']):
+            session['user']=username
+            flash("Login Success!!!","success")
+            return render_template('dashboard.html')
+
+
+        else:
+            flash("Login Failed!!!","danger")
+    
     return render_template('adminlogin.html')  
+
+
+#admin logout-----------------------------------------
+@app.route('/adminlogout')       
+
+def adminlogout():
+    session.pop('user')
+    flash("Admin Logout Successful!!!","primary")
+    return render_template("adminlogin.html")    
+
 
 
 @app.route('/admindashboard')    
@@ -52,8 +87,15 @@ def alluser():
     return render_template('alluser.html')  
 
 
-@app.route('/adduser')
+@app.route('/adduser',methods=['GET','POST'])
 def adduser():
+    if request.method=="POST":
+        name=request.form.get('name')
+        admissionid=request.form.get('admissionid')
+        db.engine.execute(f"INSERT INTO `user` (`admissionid`,`name`) VALUES ('{admissionid}','{name}') ")
+        flash("Successfully Inserted Data On Your DataBase","success")
+        return render_template("adduser.html")
+
     return render_template('adduser.html')
 
 

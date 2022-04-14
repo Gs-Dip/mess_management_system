@@ -21,11 +21,11 @@
                             <i class="fa-solid fa-user-tie text-danger fa-3x"></i>
                             <h5 class="card-title text-center text-white text-bolder">-Admin Login-</h5>
 
-
+                        {% include 'messege.html' %}          
 
                         </div>
 
-                        <form class="m-2">
+                        <form action="/adminlogin" method="POST" class="m-2">
                             <div class="mb-3">
                                 <label class="form-label text-white">User Name</label>
                                 <input type="text" class="form-control text-danger" name="username" placeholder="Enter Your User Name" required>

@@ -8,13 +8,16 @@
    <div class="text-center"> 
        <i class="fas fa-user-plus fa-3x text-danger "></i>
        <h2 class="text-white ">-AddUser-</h2>
+      
     </div>
+
+    
 
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 col-sm-12 border-top border-danger">
-
-            <form class="m-2">
+            {% include 'messege.html' %}
+            <form  action="/adduser" method="POST" class="m-2">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label text-white">Name</label>
                     <input type="text" class="form-control text-danger" name="name" placeholder="Enter Name" required>
