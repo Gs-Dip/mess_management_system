@@ -27,8 +27,10 @@
             <div id="png"><a href="/" title="HOME" class="mr-5"><img style="width:55px; height:55px ; "
                         src="..\static\images\home-page.png"></a></div>
             <!--heading-->
-            <form action="/register" method="post">
-                <div class="msg">{{ msg }}</div>
+            <form action="/signup" method="POST">
+
+                {% include 'messege.html' %}
+                
                 <h1 class="heading">Hello,Dear</h1>
                 <!--addmissionid-box-->
                 <div class="text">

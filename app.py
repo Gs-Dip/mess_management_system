@@ -1,10 +1,10 @@
- 
 import json
 from flask import Flask,redirect,render_template,request,flash,session  
 from flask_sqlalchemy import SQLAlchemy
-from importlib_metadata import re
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
-
+from flask_login import login_required,logout_user,login_user,login_manager,LoginManager,current_user
+from flask_mail import Mail
 
 #akhane json file ta open kora hoyeche....admin login ar jonno
 with open('config.json','r') as c:
@@ -19,6 +19,15 @@ app.secret_key="password"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:dipdip2020@localhost/mess_management'
 db=SQLAlchemy(app)
 
+#this is for getting the unique user access
+login_manager=LoginManager(app)
+login_manager.login_view='login'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Userinfo.query.get(int(user_id))
+
 
 
 class Test(db.Model):
@@ -31,6 +40,15 @@ class User(db.Model):
     name=db.Column(db.String(50))
 
 
+class Userinfo(UserMixin,db.Model):   
+    id=db.Column(db.Integer,primary_key=True)
+    admissionid=db.Column(db.String(50),unique=True)
+    name=db.Column(db.String(50)) 
+    email=db.Column(db.String(50))
+    address=db.Column(db.String(1000))
+    phone=db.Column(db.Integer)
+
+
 
 @app.route('/')
 def home():
@@ -38,11 +56,42 @@ def home():
 
 
 
-@app.route('/signup')
+@app.route('/signup',methods=['GET','POST'])
 def signup():
-    return render_template('signup.html')     
+    if request.method=="POST":
+        addmissionid=request.form.get('addmissionid')
+        addmissionid=addmissionid.upper()
+        name=request.form.get('name')
+        email=request.form.get('email')  
+        address=request.form.get('address')  
+        phone=request.form.get('phone')      
+         
+
+        id=User.query.filter_by(admissionid=addmissionid).first()
+        Username=User.query.filter_by(name=name).first()
+
+        checkuser=Userinfo.query.filter_by(admissionid=addmissionid).first()
+        checkemail=Userinfo.query.filter_by(email=email).first()
+
+        if id and Username:  
+            new_user=db.engine.execute(f"INSERT INTO `userinfo` (`admissionid`,`name`,`email`,`address`,`phone`) VALUES ('{addmissionid}','{name}','{email}','{address}','{phone}') ")
+            flash("Signup Success!!! Please Login","success")
+            return render_template("userlogin.html")
+
+        elif checkuser or checkemail:
+            flash("AdmissionId and Emailaddress already taken","danger")
+            return render_template("signup.html")
 
 
+        else:
+            flash("The admin has not provided your signup access yet..please try Again later","info")
+            return render_template("signup.html")
+
+    return render_template("signup.html")
+
+
+
+        
 @app.route('/userlogin') 
 def userlogin():
     return render_template('userlogin.html')   
@@ -78,7 +127,7 @@ def adminlogout():
 
 
 @app.route('/admindashboard')    
-def admindashboard():
+def admindashboard():    
     return render_template('dashboard.html')
 
 
@@ -92,6 +141,7 @@ def adduser():
     if request.method=="POST":
         name=request.form.get('name')
         admissionid=request.form.get('admissionid')
+        admissionid=admissionid.upper()
         db.engine.execute(f"INSERT INTO `user` (`admissionid`,`name`) VALUES ('{admissionid}','{name}') ")
         flash("Successfully Inserted Data On Your DataBase","success")
         return render_template("adduser.html")
