@@ -1,5 +1,5 @@
 import json
-from flask import Flask,redirect,render_template,request,flash,session  
+from flask import Flask,redirect,render_template,request,flash,session, url_for  
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -29,12 +29,24 @@ def load_user(user_id):
     return Userinfo.query.get(int(user_id))
 
 
+#akhane flask-mail ke configure kora hoyeche------
+app.config.update(
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT='465',
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME=jsondata['gmail-user'], 
+    MAIL_PASSWORD=jsondata['gmail-password']
+    
+)
+mail=Mail(app)     
+
+
 
 class Test(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     name=db.Column(db.String(50))
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     id=db.Column(db.Integer,primary_key=True)
     admissionid=db.Column(db.String(50),unique=True)
     name=db.Column(db.String(50))
@@ -42,9 +54,9 @@ class User(db.Model):
 
 class Userinfo(UserMixin,db.Model):   
     id=db.Column(db.Integer,primary_key=True)
-    admissionid=db.Column(db.String(50),unique=True)
+    admissionid=db.Column(db.String(1000))
     name=db.Column(db.String(50)) 
-    email=db.Column(db.String(50))
+    email=db.Column(db.String(50),unique=True)
     address=db.Column(db.String(1000))
     phone=db.Column(db.Integer)
 
@@ -64,7 +76,8 @@ def signup():
         name=request.form.get('name')
         email=request.form.get('email')  
         address=request.form.get('address')  
-        phone=request.form.get('phone')      
+        phone=request.form.get('phone')   
+        encriptpassword=generate_password_hash(addmissionid)   
          
 
         id=User.query.filter_by(admissionid=addmissionid).first()
@@ -73,14 +86,16 @@ def signup():
         checkuser=Userinfo.query.filter_by(admissionid=addmissionid).first()
         checkemail=Userinfo.query.filter_by(email=email).first()
 
-        if id and Username:  
-            new_user=db.engine.execute(f"INSERT INTO `userinfo` (`admissionid`,`name`,`email`,`address`,`phone`) VALUES ('{addmissionid}','{name}','{email}','{address}','{phone}') ")
+        if checkuser or checkemail:
+            flash("AdmissionId and Emailaddress already taken","danger")
+            return render_template("signup.html")
+
+        elif id and Username:  
+            new_user=db.engine.execute(f"INSERT INTO `userinfo` (`admissionid`,`name`,`email`,`address`,`phone`) VALUES ('{encriptpassword}','{name}','{email}','{address}','{phone}') ")
             flash("Signup Success!!! Please Login","success")
             return render_template("userlogin.html")
 
-        elif checkuser or checkemail:
-            flash("AdmissionId and Emailaddress already taken","danger")
-            return render_template("signup.html")
+       
 
 
         else:
@@ -92,9 +107,26 @@ def signup():
 
 
         
-@app.route('/userlogin') 
-def userlogin():
-    return render_template('userlogin.html')   
+@app.route('/userlogin',methods=['GET','POST']) 
+def userlogin():      
+      if request.method=="POST":
+        name=request.form.get('name')
+        admissionid=request.form.get('admissionid')
+        name=name.lower()
+        admissionid=admissionid.upper()
+        
+        user=Userinfo.query.filter_by(name=name).first()
+        
+        if user and check_password_hash(user.admissionid,admissionid): 
+            login_user(user)
+            flash("Login Success!!!","info")
+            return render_template("userdashboard.html")
+
+        else:
+            flash("Login Faild try again!!!","danger") 
+            return render_template("userlogin.html")
+        
+      return render_template('userlogin.html')   
 
 
 #admin login------------------------------
@@ -126,8 +158,19 @@ def adminlogout():
 
 
 
+#user logout---------------------------------
+@app.route('/userlogout')
+def userlogout():
+    logout_user()
+    flash("Logout Successful","warning")
+    return render_template("userlogin.html")
+
+
+
 @app.route('/admindashboard')    
-def admindashboard():    
+# @login_required
+def admindashboard(): 
+  
     return render_template('dashboard.html')
 
 
@@ -214,4 +257,4 @@ def test():
 
 
 if __name__=='__main__':
-    app.run(debug=True,port=9000) 
+    app.run(debug=True,port=9000)
