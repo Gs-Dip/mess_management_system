@@ -14,11 +14,11 @@
     <br>
     <div class="row">
         <div class="col-md-12">
-
+            {% include 'messege.html' %}   
             <table class="table table-striped table-dark">
                 <thead>
                   <tr class="bg-danger">
-                    <th scope="col">Id</th>
+                     
                     <th scope="col">AdmissionID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
@@ -28,26 +28,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>A125</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>faridpur</td>
-                    <td>01755644125</td>
-                    <td><a href="#" type="submit" class="btn btn-warning ">Edit</a> <a href="#"   type="submit" class="btn btn-danger ml-3">Delete</a></td>
+                  {% for data in data %}
+                  <tr>                     
+                    <td>{{data.admissionid}}</td>
+                    <td>{{data.name}}</td>
+                    <td>{{data.email}}</td>
+                    <td>{{data.address}}</td>
+                    <td>{{data.phone}}</td>
+                    <td><a href="/useredit/{{data.id}}" class="btn btn-warning ">Edit</a> <a href="#" class="btn btn-danger ml-3">Delete</a></td>
                     
                   </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>A128</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>faridpur</td>
-                    <td>01755644125</td>
-                    <td><a href="#" type="submit" class="btn btn-warning ">Edit</a> <a href="#"   type="submit" class="btn btn-danger ml-3">Delete</a></td>
-                  </tr>
-                  
+                  {% endfor %}
+                                    
                 </tbody>
               </table>
         </div>

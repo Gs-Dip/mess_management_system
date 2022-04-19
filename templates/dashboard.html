@@ -7,12 +7,14 @@
 
 <div class="container-fluid px-4">
     
-    <div class="row g-3 my-2">
+    <div class="row  my-2">
         <div class="col-md-3">
             <div class="p-3 bg-danger shadow-sm d-flex justify-content-around align-items-center rounded">
-                <div class="text-white">                    
-                    <h3 class="fs-2">720</h3>
-                    <p class="fs-5">Users</p>
+                <div class="text-white"> 
+                    {% for user in alluser %}                   
+                        <h3>{{user}}</h3>
+                        <p>Users</p>
+                    {% endfor %}
                 </div>
                 <i class="fas fa-users fa-3x "></i>
             </div>

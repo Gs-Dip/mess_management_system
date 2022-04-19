@@ -1,10 +1,13 @@
+from crypt import methods
+from enum import unique
 import json
+from wsgiref.validate import validator
 from flask import Flask,redirect,render_template,request,flash,session, url_for  
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import login_required,logout_user,login_user,login_manager,LoginManager,current_user
-from flask_mail import Mail
+from flask_mail import Mail 
 
 #akhane json file ta open kora hoyeche....admin login ar jonno
 with open('config.json','r') as c:
@@ -20,13 +23,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:dipdip2020@localhost/mess_
 db=SQLAlchemy(app)
 
 #this is for getting the unique user access
-login_manager=LoginManager(app)
+login_manager=LoginManager()
+login_manager.init_app(app)
 login_manager.login_view='login'
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Userinfo.query.get(int(user_id))
+    return Userlogin.query.get(int(user_id))
 
 
 #akhane flask-mail ke configure kora hoyeche------
@@ -41,7 +45,7 @@ app.config.update(
 mail=Mail(app)     
 
 
-
+# all class ---------------------------------------------
 class Test(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     name=db.Column(db.String(50))
@@ -52,7 +56,7 @@ class User(UserMixin,db.Model):
     name=db.Column(db.String(50))
 
 
-class Userinfo(UserMixin,db.Model):   
+class Userlogin(UserMixin,db.Model):   
     id=db.Column(db.Integer,primary_key=True)
     admissionid=db.Column(db.String(1000))
     name=db.Column(db.String(50)) 
@@ -60,6 +64,15 @@ class Userinfo(UserMixin,db.Model):
     address=db.Column(db.String(1000))
     phone=db.Column(db.Integer)
 
+
+
+class Userinfo(UserMixin,db.Model):   
+    id=db.Column(db.Integer,primary_key=True)
+    admissionid=db.Column(db.String(50),unique=True)
+    name=db.Column(db.String(50)) 
+    email=db.Column(db.String(50),unique=True)
+    address=db.Column(db.String(1000))
+    phone=db.Column(db.Integer)
 
 
 @app.route('/')
@@ -74,6 +87,7 @@ def signup():
         addmissionid=request.form.get('addmissionid')
         addmissionid=addmissionid.upper()
         name=request.form.get('name')
+        name=name.lower()
         email=request.form.get('email')  
         address=request.form.get('address')  
         phone=request.form.get('phone')   
@@ -83,15 +97,17 @@ def signup():
         id=User.query.filter_by(admissionid=addmissionid).first()
         Username=User.query.filter_by(name=name).first()
 
-        checkuser=Userinfo.query.filter_by(admissionid=addmissionid).first()
-        checkemail=Userinfo.query.filter_by(email=email).first()
+        checkuser=Userlogin.query.filter_by(admissionid=addmissionid).first()
+        checkemail=Userlogin.query.filter_by(email=email).first()
 
         if checkuser or checkemail:
             flash("AdmissionId and Emailaddress already taken","danger")
             return render_template("signup.html")
 
         elif id and Username:  
-            new_user=db.engine.execute(f"INSERT INTO `userinfo` (`admissionid`,`name`,`email`,`address`,`phone`) VALUES ('{encriptpassword}','{name}','{email}','{address}','{phone}') ")
+            new_user=db.engine.execute(f"INSERT INTO `userlogin` (`admissionid`,`name`,`email`,`address`,`phone`) VALUES ('{encriptpassword}','{name}','{email}','{address}','{phone}') ")
+
+            db.engine.execute(f"INSERT INTO `userinfo` (`admissionid`,`name`,`email`,`address`,`phone`) VALUES ('{addmissionid}','{name}','{email}','{address}','{phone}') ")
             flash("Signup Success!!! Please Login","success")
             return render_template("userlogin.html")
 
@@ -115,7 +131,7 @@ def userlogin():
         name=name.lower()
         admissionid=admissionid.upper()
         
-        user=Userinfo.query.filter_by(name=name).first()
+        user=Userlogin.query.filter_by(name=name).first()
         
         if user and check_password_hash(user.admissionid,admissionid): 
             login_user(user)
@@ -139,7 +155,7 @@ def adminlogin():
         if(username==jsondata['user'] and password==jsondata['password']):
             session['user']=username
             flash("Login Success!!!","success")
-            return render_template('dashboard.html')
+            return redirect('/admindashboard')
 
 
         else:
@@ -169,14 +185,45 @@ def userlogout():
 
 @app.route('/admindashboard')    
 # @login_required
-def admindashboard(): 
-  
-    return render_template('dashboard.html')
+def admindashboard():   
+    alluser=db.engine.execute("SELECT COUNT(*) FROM userinfo") 
+    
+      
+    return render_template('dashboard.html',alluser=alluser)
 
 
 @app.route('/alluser')  
 def alluser():
-    return render_template('alluser.html')  
+    data=db.engine.execute("SELECT * From userinfo")
+
+    return render_template('alluser.html',data=data)  
+
+
+@app.route('/useredit/<string:id>',methods=['GET','POST'])
+def useredit(id):
+    if request.method=="POST":
+        
+        name=request.form.get('name')
+        admissionid=request.form.get('admissionid')
+        address=request.form.get('address')
+        email=request.form.get('email')
+        phone=request.form.get('phone')
+        
+
+        admissionid=admissionid.upper()
+        name=name.lower()
+        encriptpassword=generate_password_hash(admissionid)
+
+        db.engine.execute(f"UPDATE `userlogin` SET `admissionid`='{encriptpassword}',`name`='{name}',`address`='{address}',`email`='{email}',`phone`='{phone}' WHERE `userlogin`.`id`={id}")
+
+        db.engine.execute(f"UPDATE `userinfo` SET `admissionid`='{admissionid}',`name`='{name}',`address`='{address}',`email`='{email}',`phone`='{phone}' WHERE `userinfo`.`id`={id}")
+
+        flash("User Update Successfully","info")
+ 
+        return redirect("/alluser")
+
+    post=Userinfo.query.filter_by(id=id).first()
+    return render_template('useredit.html',post=post)    
 
 
 @app.route('/adduser',methods=['GET','POST'])
@@ -185,6 +232,7 @@ def adduser():
         name=request.form.get('name')
         admissionid=request.form.get('admissionid')
         admissionid=admissionid.upper()
+        name=name.lower()
         db.engine.execute(f"INSERT INTO `user` (`admissionid`,`name`) VALUES ('{admissionid}','{name}') ")
         flash("Successfully Inserted Data On Your DataBase","success")
         return render_template("adduser.html")

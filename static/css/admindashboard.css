@@ -148,4 +148,15 @@ label #sidebar_btn:hover{
   display: none;
 }
 
+/* hidden number input arrow for chroom */  
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* hidden number input arrow for firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+  }
 

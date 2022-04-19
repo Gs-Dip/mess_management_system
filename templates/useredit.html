@@ -1,0 +1,61 @@
+{% extends 'baseadmindashboard.html' %}
+
+{% block title %}User Edit{% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5">
+   <div class="text-center"> 
+       <i class="fas fa-user-edit fa-3x text-danger "></i>
+       <h2 class="text-white ">-Edit User-</h2>
+      
+    </div>
+
+    
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 col-sm-12 border-top border-danger">
+            {% include 'messege.html' %}
+            <form  action="/useredit/{{post.id}}" method="POST" class="m-2">
+                <div class="mb-3">
+                    <label class="form-label text-white">Name</label>
+                    <input type="text" class="form-control text-danger" name="name"  value="{{post.name}}">
+                   
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Admission ID</label>
+                    <input type="text" class="form-control text-danger" name="admissionid" value="{{post.admissionid}}">
+                    
+                </div> 
+
+                <div class="mb-3">
+                    <label class="form-label text-white">Email</label>
+                    <input type="email" class="form-control text-danger" name="email" value="{{post.email}}">
+                    
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white">Address</label>
+                    <input type="text" class="form-control text-danger" name="address" value="{{post.address}}">
+                    
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label text-white">Phone</label>
+                    <input type="number" class="form-control text-danger" name="phone" value="{{post.phone}}">
+                    
+                </div>
+
+               <div class="text-center">  
+                  <button type="submit" class="btn bg-warning  ">Update</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-3"></div>
+    </div>
+</div>
+
+{% endblock body %}
