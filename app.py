@@ -1,7 +1,5 @@
-from crypt import methods
-from enum import unique
 import json
-from wsgiref.validate import validator
+# from wsgiref.validate import validator
 from flask import Flask,redirect,render_template,request,flash,session, url_for  
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
@@ -62,7 +60,7 @@ class Userlogin(UserMixin,db.Model):
     name=db.Column(db.String(50)) 
     email=db.Column(db.String(50),unique=True)
     address=db.Column(db.String(1000))
-    phone=db.Column(db.Integer)
+    phone=db.Column(db.String(50))
 
 
 
@@ -72,7 +70,15 @@ class Userinfo(UserMixin,db.Model):
     name=db.Column(db.String(50)) 
     email=db.Column(db.String(50),unique=True)
     address=db.Column(db.String(1000))
-    phone=db.Column(db.Integer)
+    phone=db.Column(db.String(50))
+
+class Daily_bazarexpense(UserMixin,db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    addmissionid=db.Column(db.String(50))
+    name=db.Column(db.String(50))
+    bazarinfo=db.Column(db.String(5000))
+    amount=db.Column(db.Integer)
+    date=db.Column(db.Date)    
 
 
 @app.route('/')
@@ -266,8 +272,21 @@ def userdashboard():
     return render_template('userdashboard.html')       
 
 
-@app.route('/userdailybazarexpense')
+@app.route('/userdailybazarexpense',methods=['GET','POST'])
 def userdailybazarexpense():
+    if request.method=="POST":
+        date=request.form.get('date') 
+        addmissionid=request.form.get('admissionid')       
+        name=request.form.get('name')        
+        bazarinfo=request.form.get('bazarinfo')
+        amount=request.form.get('amount')
+        
+        addmissionid=addmissionid.upper()
+        name=name.lower()
+
+        db.engine.execute(f"INSERT INTO `daily_bazarexpense` (`date`,`addmissionid`,`name`,`bazarinfo`,`amount`) VALUES ('{date}','{addmissionid}','{name}','{bazarinfo}','{amount}')")
+        flash("Record Added Successfully","success")
+        return render_template('userdailybazarexpense.html')
     return render_template('userdailybazarexpense.html') 
 
 

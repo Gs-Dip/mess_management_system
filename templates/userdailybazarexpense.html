@@ -28,7 +28,8 @@
                         </div>
 
                         <div class="container">
-                            <form action="#" method="POST">
+                          {% include 'messege.html' %}
+                            <form action="/userdailybazarexpense" method="POST">
                                 <div class="form-group">
                                   <label  class="text-white" for="exampleInputEmail1">Date</label>
                                   <input type="date" class="form-control text-danger" id="exampleInputEmail1" aria-describedby="emailHelp" name="date"  required >
