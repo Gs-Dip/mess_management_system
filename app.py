@@ -1,5 +1,5 @@
+from crypt import methods
 import json
-# from wsgiref.validate import validator
 from flask import Flask,redirect,render_template,request,flash,session, url_for  
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
@@ -28,7 +28,7 @@ login_manager.login_view='login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Userlogin.query.get(int(user_id))
+    return Userinfo.query.get(int(user_id))
 
 
 #akhane flask-mail ke configure kora hoyeche------
@@ -193,9 +193,10 @@ def userlogout():
 # @login_required
 def admindashboard():   
     alluser=db.engine.execute("SELECT COUNT(*) FROM userinfo") 
+    totalbazar=db.engine.execute("SELECT COUNT(*) FROM daily_bazarexpense")
     
       
-    return render_template('dashboard.html',alluser=alluser)
+    return render_template('dashboard.html',alluser=alluser,totalbazar=totalbazar)
 
 
 @app.route('/alluser')  
@@ -240,15 +241,55 @@ def adduser():
         admissionid=admissionid.upper()
         name=name.lower()
         db.engine.execute(f"INSERT INTO `user` (`admissionid`,`name`) VALUES ('{admissionid}','{name}') ")
+        
         flash("Successfully Inserted Data On Your DataBase","success")
-        return render_template("adduser.html")
+        return redirect("/adduser")
 
-    return render_template('adduser.html')
+
+    getdata=db.engine.execute("SELECT * From user")
+    return render_template('adduser.html',getdata=getdata)
+
+
+@app.route('/deletealldata')
+def deleteadduser():
+    db.engine.execute("DELETE FROM user")
+    db.engine.execute("DELETE FROM userinfo")
+    db.engine.execute("DELETE FROM userlogin")
+    db.engine.execute("DELETE FROM daily_bazarexpense")
+        
+    return redirect("/admindashboard")     
 
 
 @app.route('/dailybazarexpenses')
-def dailybazarexpenses():
-    return render_template('daily-bazar-expenses.html')    
+def dailybazarexpenses():    
+    getdata=db.engine.execute("SELECT * From daily_bazarexpense")
+    return render_template('daily-bazar-expenses.html',getdata=getdata)   
+
+
+
+
+@app.route('/adminbazaredit/<string:id>',methods=['GET','POST'])
+def adminbazaredit(id):
+    if request.method=="POST":
+        date=request.form.get('date')
+        addmissionid=request.form.get('addmissionid')
+        name=request.form.get('name')
+        bazarinfo=request.form.get('bazarinfo')
+        amount=request.form.get('amount')
+        
+
+        addmissionid=addmissionid.upper()
+        name=name.lower()
+        
+
+        db.engine.execute(f"UPDATE `daily_bazarexpense` SET `date`='{date}',`name`='{name}',`addmissionid`='{addmissionid}',`bazarinfo`='{bazarinfo}',`amount`='{amount}' WHERE `daily_bazarexpense`.`id`={id}")
+         
+        flash("Bazar Record Update Successfully","success") 
+        return redirect("/dailybazarexpenses")
+
+
+    postdata=Daily_bazarexpense.query.filter_by(id=id).first()
+    return render_template('adminbazaredit.html',postdata=postdata)     
 
 
 @app.route('/mealrecord')

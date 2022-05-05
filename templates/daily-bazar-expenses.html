@@ -14,11 +14,10 @@
 
     <div class="row ">
         <div class="col-md-12">
-
+             {% include 'messege.html' %}
             <table class="table table-striped table-dark">
                 <thead>
-                  <tr class="bg-danger">
-                    <th scope="col">Id</th>
+                  <tr class="bg-danger">                     
                     <th scope="col">AdmissionID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Date</th>
@@ -28,26 +27,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>A125</td>
-                    <td>Dip</td>
-                    <td>2022-04-6</td>
-                    <td>rice,oil</td>
-                    <td>400</td>
-                    <td><a href="#" type="submit" class="btn btn-warning ">Edit</a> <a href="#"   type="submit" class="btn btn-danger ml-3">Delete</a></td>
+                  {% for data in getdata %}
+                  <tr>                     
+                    <td>{{data.addmissionid}}</td>
+                    <td>{{data.name}}</td>
+                    <td>{{data.date}}</td>
+                    <td>{{data.bazarinfo}}</td>
+                    <td>{{data.amount}}</td>
+                    <td><a href="/adminbazaredit/{{data.id}}" class="btn btn-warning ">Edit</a> <a href="#" class="btn btn-danger ml-3">Delete</a></td>
                     
                   </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>A130</td>
-                    <td>Tanmoy</td>
-                    <td>2022-04-7</td>
-                    <td>dal</td>
-                    <td>100</td>
-                    <td><a href="#" type="submit" class="btn btn-warning ">Edit</a> <a href="#"   type="submit" class="btn btn-danger ml-3">Delete</a></td>
-                    
-                  </tr>
+                  {% endfor %}
                   
                 </tbody>
               </table>

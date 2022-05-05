@@ -34,8 +34,11 @@
         <div class="col-md-3">
             <div class="p-3 bg-danger shadow-sm d-flex justify-content-around align-items-center rounded">
                 <div Class="text-white">
-                    <h3 class="fs-2">3899</h3>
-                    <p class="fs-5">TotalBazar</p>
+                    {% for data in totalbazar %}
+                        <h3>{{data}}</h3>
+                        <p>TotalBazar</p>
+                    {% endfor %}
+                    
                 </div>
                 <i class="fas fa-shopping-basket fa-3x"></i>
             </div>
@@ -51,6 +54,8 @@
             </div>
         </div>
     </div>
+
+    <a href="/deletealldata" class="btn btn-danger float-md-right mt-2 text-white ">Clear All Data</a>
 
     <div class="row">
         <div class="col-md-12 col-sm-6">
