@@ -1,8 +1,10 @@
+from ast import Num, Str
 from crypt import methods
 import json
 from flask import Flask,redirect,render_template,request,flash,session, url_for  
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from markupsafe import string
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import login_required,logout_user,login_user,login_manager,LoginManager,current_user
 from flask_mail import Mail 
@@ -193,7 +195,10 @@ def userlogout():
 # @login_required
 def admindashboard():   
     alluser=db.engine.execute("SELECT COUNT(*) FROM userinfo") 
+    alluser=alluser.fetchone() #akhane fetchone()  bebohar korar karon holo userinfo theke total row jog korar  por shudhu sonkha ta pawar jonno.....
+    
     totalbazar=db.engine.execute("SELECT COUNT(*) FROM daily_bazarexpense")
+    totalbazar=totalbazar.fetchone()
     
       
     return render_template('dashboard.html',alluser=alluser,totalbazar=totalbazar)
@@ -249,7 +254,7 @@ def adduser():
     getdata=db.engine.execute("SELECT * From user")
     return render_template('adduser.html',getdata=getdata)
 
-
+#clear all data route------------------------------------------------------- 
 @app.route('/deletealldata')
 def deleteadduser():
     db.engine.execute("DELETE FROM user")
@@ -259,7 +264,7 @@ def deleteadduser():
         
     return redirect("/admindashboard")     
 
-
+#admin daily bazar expenses-----------------------------------
 @app.route('/dailybazarexpenses')
 def dailybazarexpenses():    
     getdata=db.engine.execute("SELECT * From daily_bazarexpense")
