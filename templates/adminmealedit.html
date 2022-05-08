@@ -1,0 +1,68 @@
+{% extends 'baseadmindashboard.html' %}
+
+{% block title %}Meal Edit{% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <div class="text-center">
+        <i class="fas fa-mortar-pestle fa-3x text-danger "></i>
+        <h2 class="text-white ">-Edit Meal-</h2>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 col-sm-12 border-top border-danger">
+
+            <form action="/editmealrecord/{{postdata.id}}" method="POST" class="m-2">
+                <div class="mb-3">
+                    <label class="form-label text-white">Date</label>
+                    <input type="date" class="form-control text-danger" name="date" value="{{postdata.date}}">
+
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-white">Admission ID</label>
+                    <input type="text" class="form-control text-danger" name="admissionid" value="{{postdata.addmissionid}}">
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white">name</label>
+                    <input type="text" class="form-control text-danger" name="name" value="{{postdata.name}}">
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white">BreakFast</label>
+                    <input type="number" class="form-control text-danger" name="breakfast" value="{{postdata.breakfast}}">
+
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label text-white">Lunch</label>
+                    <input type="number" class="form-control text-danger" name="lunch" value="{{postdata.lunch}}">
+
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label text-white">Dinner</label>
+                    <input type="number" class="form-control text-danger" name="dinner" value="{{postdata.dinner}}">
+
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn bg-warning  ">Update</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-3"></div>
+    </div>
+</div>
+
+{% endblock body %}

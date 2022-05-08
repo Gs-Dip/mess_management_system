@@ -1,5 +1,3 @@
-from ast import Num, Str
-from crypt import methods
 import json
 from flask import Flask,redirect,render_template,request,flash,session, url_for  
 from flask_sqlalchemy import SQLAlchemy
@@ -81,6 +79,15 @@ class Daily_bazarexpense(UserMixin,db.Model):
     bazarinfo=db.Column(db.String(5000))
     amount=db.Column(db.Integer)
     date=db.Column(db.Date)    
+
+class Meal_record(UserMixin,db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    addmissionid=db.Column(db.String(50))
+    name=db.Column(db.String(50))
+    date=db.Column(db.Date)
+    breakfast=db.Column(db.Integer)
+    lunch=db.Column(db.Integer)
+    dinner=db.Column(db.Integer)     
 
 
 @app.route('/')
@@ -296,11 +303,47 @@ def adminbazaredit(id):
     postdata=Daily_bazarexpense.query.filter_by(id=id).first()
     return render_template('adminbazaredit.html',postdata=postdata)     
 
-
+#admin meal record---------------
 @app.route('/mealrecord')
 def mealrecord():
-    return render_template('meal-record.html')    
+    getdata=db.engine.execute("SELECT * FROM meal_record")
+    
+    return render_template('meal-record.html',postdata=getdata)    
 
+
+@app.route('/editmealrecord/<string:id>',methods=['GET','POST'])
+def editmealrecord(id):
+        if request.method=="POST":
+            date=request.form.get('date')
+            addmissionid=request.form.get('admissionid')
+            name=request.form.get('name')
+            breakfast=request.form.get('breakfast')
+            lunch=request.form.get('lunch')
+            dinner=request.form.get('dinner')
+        
+
+            addmissionid=addmissionid.upper()
+            name=name.lower()
+        
+
+            db.engine.execute(f"UPDATE `meal_record` SET `date`='{date}',`name`='{name}',`addmissionid`='{addmissionid}',`breakfast`='{breakfast}',`lunch`='{lunch}',`dinner`='{dinner}' WHERE `meal_record`.`id`={id}")
+         
+            flash("Meal Record Update Successfully","success") 
+            return redirect("/mealrecord")
+
+
+        postdata=Meal_record.query.filter_by(id=id).first()
+        return render_template('adminmealedit.html',postdata=postdata)
+
+
+
+@app.route("/deletemeal/<string:id>",methods=['GET','POST'])
+
+def hdelete(id):
+    db.engine.execute(f"DELETE FROM `meal_record` WHERE  `meal_record`.`id`={id}")
+
+    flash("Data Deleted Successfully","success")
+    return redirect("/mealrecord")        
 
 @app.route('/bazarrecord')
 def bazarrecord():
@@ -336,8 +379,23 @@ def userdailybazarexpense():
     return render_template('userdailybazarexpense.html') 
 
 
-@app.route('/usermealrecord')
+@app.route('/usermealrecord',methods=['GET','POST'])
 def usermealrecord():
+    if request.method=="POST":
+        date=request.form.get('date')
+        addmissionid=request.form.get('admissionid')
+        addmissionid=addmissionid.upper()
+        name=request.form.get('name')
+        name=name.lower()
+        breakfast=request.form.get('breakfast')
+        lunch=request.form.get('lunch')
+        dinner=request.form.get('dinner')
+
+        db.engine.execute(f"INSERT INTO `meal_record` (`date`,`addmissionid`,`name`,`breakfast`,`lunch`,`dinner`) VALUES ('{date}','{addmissionid}','{name}','{breakfast}','{lunch}','{dinner}')")
+        flash("Record Added Successfully","success")
+        return redirect("/usermealrecord")
+        
+        
     return render_template('usermealrecord.html')    
 
 

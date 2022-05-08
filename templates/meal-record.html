@@ -7,6 +7,7 @@
     <div class="text-center mt-2">        
         <i class="fas fa-mortar-pestle  text-danger fa-3x"></i>
         <h3 class="text-white border-bottom border-danger pb-2">-MealRecord-</h3>
+        {% include 'messege.html' %}
     </div>
     
 
@@ -16,7 +17,7 @@
             <table class="table table-striped table-dark">
                 <thead>
                   <tr class="bg-danger">
-                    <th scope="col">Id</th>
+                    
                     <th scope="col">AdmissionID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Date</th>
@@ -27,29 +28,19 @@
                   </tr>
                 </thead>
                 <tbody>
+                  {% for data in postdata %}
                   <tr>
-                    <th scope="row">1</th>
-                    <td>A125</td>
-                    <td>Dip</td>
-                    <td>2022-04-6</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td><a href="#" type="submit" class="btn btn-warning ">Edit</a> <a href="#"   type="submit" class="btn btn-danger ml-3">Delete</a></td>
                     
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>A130</td>
-                    <td>Tanmoy</td>
-                    <td>2022-04-7</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td><a href="#" type="submit" class="btn btn-warning ">Edit</a> <a href="#"   type="submit" class="btn btn-danger ml-3">Delete</a></td>
+                    <td>{{data.addmissionid}}</td>
+                    <td>{{data.name}}</td>
+                    <td>{{data.date}}</td>
+                    <td>{{data.breakfast}}</td>
+                    <td>{{data.lunch}}</td>
+                    <td>{{data.dinner}}</td>
+                    <td><a href="/editmealrecord/{{data.id}}"  class="btn btn-warning ">Edit</a> <a href="/deletemeal/{{data.id}}"    class="btn btn-danger ml-3">Delete</a></td>
                     
-                  </tr>
-                  
+                  </tr> 
+                 {% endfor %}
                 </tbody>
               </table>
         </div>
